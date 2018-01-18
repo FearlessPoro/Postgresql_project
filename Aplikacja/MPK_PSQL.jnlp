@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="MPK_PSQL.jnlp">
+  <information>
+    <title>MPK_PSQL</title>
+    <vendor>Wojte_000</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="MPK_PSQL.jar" size="26938" download="eager" />
+    <jar href="lib\jsch-0.1.54.jar" size="278612" download="eager" />
+    <jar href="lib\postgresql-42.1.4.jre7.jar" size="708602" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="MPK_PSQL" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="mpk_psql.MPK_PSQL"  name="MPK_PSQL" />
+  <update check="always"/>
+</jnlp>

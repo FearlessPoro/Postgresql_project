@@ -15,7 +15,7 @@ public class generate_kierowcy{
 		}
 		Random losowa = new Random();
 		int pojazdy[] = new int[200];
-		for(int i=2; i< 202; i++)
+		for(int i=201; i< 403; i++)
 		{
 			String napis = "false, true";
 			int wylosowane = losowa.nextInt(3);
@@ -30,7 +30,7 @@ public class generate_kierowcy{
 			
 			int mniej = i-1;
 			out.println("INSERT INTO Kierowcy VALUES ("
-			+ i + ", " + mniej +  ", " + napis + ");");
+			+ i + ", " + "NULL" +  ", " + napis + ");");
 
 		}
 		out.close();

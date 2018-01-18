@@ -2,7 +2,7 @@ import java.util.*;
 import java.lang.*;
 import java.io.*;
 
-public class generate_pojazdy{
+public class generate{
 	public static void main(String[] args) {
 		String[] names = {"Jan", "Adam", "Karol", "Michał", "Kamil", "Karolina",
 		"Katarzyna", "Agnieszka", "Magdalena", "Piotr", "Justyna", "Wojciech", "Jakub",

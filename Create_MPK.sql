@@ -1,4 +1,3 @@
-CREATE SCHEMA mpk;
 
 CREATE SEQUENCE MPK.typy_polaczen_id_typu_seq_1;
 
@@ -47,7 +46,7 @@ CREATE TABLE MPK.Linie (
                 Czestosc_swieta INTEGER NOT NULL,
                 Pierwszy_Kurs TIME NOT NULL,
                 Ostatni_Kurs TIME NOT NULL,
-                Czas_podrozy NUMERIC NOT NULL,
+                Czas_podrozy INTEGER NOT NULL,
                 CONSTRAINT id_linii PRIMARY KEY (ID_Linii)
 );
 
@@ -59,7 +58,6 @@ CREATE SEQUENCE MPK.przystanki_id_przystanku_seq;
 CREATE TABLE MPK.Przystanki (
                 ID_Przystanku INTEGER NOT NULL DEFAULT nextval('MPK.przystanki_id_przystanku_seq'),
                 Nazwa VARCHAR NOT NULL,
-                Adres VARCHAR NOT NULL,
                 Aglomeracyjny BOOLEAN NOT NULL,
                 CONSTRAINT id_przystanku PRIMARY KEY (ID_Przystanku)
 );
@@ -70,7 +68,7 @@ ALTER SEQUENCE MPK.przystanki_id_przystanku_seq OWNED BY MPK.Przystanki.ID_Przys
 CREATE TABLE MPK.Polaczenia_przystankow (
                 Od INTEGER NOT NULL,
                 Do_1 INTEGER NOT NULL,
-                Czas_podrozy NUMERIC NOT NULL,
+                Czas_podrozy INTEGER NOT NULL,
                 ID_Typu INTEGER NOT NULL,
                 CONSTRAINT id_polaczen PRIMARY KEY (Od, Do_1)
 );
@@ -80,7 +78,7 @@ CREATE TABLE MPK.Przystanki_Linie (
                 ID_Linii INTEGER NOT NULL,
                 ID_Przystanku INTEGER NOT NULL,
                 Kolejnosc INTEGER NOT NULL,
-                CONSTRAINT id_pl PRIMARY KEY (ID_Linii, ID_Przystanku)
+                CONSTRAINT id_pl PRIMARY KEY (ID_Linii, ID_Przystanku, Kolejnosc)
 );
 
 
@@ -91,8 +89,8 @@ CREATE TABLE MPK.Pracownicy (
                 Imie VARCHAR NOT NULL,
                 Nazwisko VARCHAR NOT NULL,
                 Stanowisko VARCHAR NOT NULL,
+                Pensja INTEGER NOT NULL,
                 Przelozony INTEGER,
-                Pensja NUMERIC NOT NULL,
                 CONSTRAINT id_pracownika PRIMARY KEY (ID_Pracownika)
 );
 

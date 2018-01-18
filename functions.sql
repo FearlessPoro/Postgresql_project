@@ -1,76 +1,4 @@
 
---Sprawdzanie czy zajezdnie maja wolne miejsca
-CREATE OR REPLACE FUNCTION sprawdz_zajezdnie() RETURNS TRIGGER AS'
-DECLARE
-i integer;
-BEGIN
-IF TG_OP = ''INSERT'' OR TG_OP = ''UPDATE'' THEN
-	i := (SELECT COUNT(*) FROM pojazdy WHERE ID_Zajezdni=NEW.ID_zajezdni);
-	IF( i >= (SELECT z.Pojemnosc FROM Zajezdnie z WHERE z.ID_Zajezdni=NEW.id_zajezdni) ) THEN
-		RAISE NOTICE ''Ta zajezdnia(ID_zajezdni=%) jest juz pelna(Liczba przypisanych pojazdow: %), wybierz inną'',  new.ID_zajezdni, i;
-		RETURN NULL;
-	ELSE RETURN NEW;
-	END IF;
-END IF;
-END;
-' LANGUAGE 'plpgsql';
-
-CREATE TRIGGER zajezdnie BEFORE INSERT OR UPDATE ON pojazdy FOR EACH ROW EXECUTE PROCEDURE sprawdz_zajezdnie();
-
-
---sprawdzanie czy przelozony jest kierownikiem
-CREATE OR REPLACE FUNCTION sprawdz_przelozonego() returns TRIGGER AS'
-BEGIN
-IF TG_OP = ''INSERT'' OR TG_OP = ''UPDATE'' THEN
-	IF ( (SELECT p.stanowisko from pracownicy p WHERE p.id_pracownika=new.przelozony)<>''Kierownik'') THEN
-	RAISE NOTICE ''Tylko kierownik moze byc przelozonym!'';
-	RETURN NULL;
-	ELSE RETURN NEW;
-	END IF;
-END IF;
-END;
-' LANGUAGE 'plpgsql';
-
-CREATE TRIGGER przelozony BEFORE INSERT OR UPDATE ON pracownicy FOR EACH ROW EXECUTE PROCEDURE sprawdz_przelozonego();
-
---Funkcja sprawdzajaca czy dodajemy/usuwamy z konca linii
--- TODO Dodac mozliwosc usuwania i dodawania na srodek? 
-CREATE OR REPLACE FUNCTION czy_jest_polaczenie() RETURNS TRIGGER AS'
-DECLARE
- size integer;
-BEGIN 
-	
-if TG_OP = ''DELETE'' OR TG_OP = ''UPDATE'' THEN
-	size = (SELECT COUNT(*) from przystanki_linie WHERE id_linii=old.id_linii);
-	if old.kolejnosc <> size THEN
-		RAISE NOTICE ''Nie mozna usuwac polaczen ze srodka linii! (obecna liczba przystankow w linii: %)'', size;
-		RETURN NULL;
-	ELSE RETURN OLD;
-	END IF;
-END IF;
-if tg_op = ''INSERT'' OR tg_op = ''update'' THEN
-		size = (SELECT COUNT(*) from przystanki_linie WHERE id_linii=new.id_linii);
-		if new.kolejnosc = size+1 THEN 
-			-- TODO sprawdzanie czy mozna dodac polaczenie na podstawie istnienia polaczen
-			-- if new.id_linii < 100 THEN
-			-- 	if new.id_ THEN
-			-- 	END IF;
-			-- ELSE if  THEN
-			-- 	END IF;
-			-- END IF;
-			return NEW;
-		ELSE RAISE NOTICE ''Mozna dodawac przystanki tylko na koniec linii!(obecna liczba przystankow w linii: %)'', size;
-		RETURN NULL;
-		END IF;
-END IF;
-
-END;
-' LANGUAGE 'plpgsql';
-
-
-CREATE TRIGGER dziury_w_liniach BEFORE INSERT OR UPDATE OR DELETE ON przystanki_linie FOR EACH ROW EXECUTE PROCEDURE czy_jest_polaczenie();
-
-
 --funkcja do liczenia czasu przejazdu liniami, argument to id_linii, zwraca czas w minutach
 CREATE OR REPLACE FUNCTION Licz_czas_przejazdu(n INTEGER) RETURNS INTEGER AS'
 DECLARE
@@ -88,40 +16,143 @@ END;
 ' LANGUAGE 'plpgsql'; 
 
 
-CREATE OR REPLACE FUNCTION Uzupelnianie_czasu_podrozy() RETURNS TRIGGER AS'
+
+
+CREATE OR REPLACE FUNCTION Liczenie_liczby_kursow(Linia INTEGER, data DATE) RETURNS INTEGER AS'
+DECLARE
+	czas TIME;
+	i INTEGER;
 BEGIN
-if(TG_OP = ''UPDATE'' OR TG_OP = ''INSERT'') THEN
-	UPDATE Linie set czas_podrozy=Licz_czas_przejazdu(new.id_linii) WHERE id_linii=new.id_linii;
-	RETURN NEW;
-ELSE IF(TG_OP ==''DELETE'') THEN
-	UPDATE Linie set czas_podrozy=Licz_czas_przejazdu(old.id_linii) WHERE id_linii=OLD.id_linii;
-	RETURN NEW;
-END IF;
-END IF;
+	czas := (SELECT Pierwszy_kurs from Linie WHERE id_linii=Linia);
+	i := 0;
+	if to_char(data, ''dy'') = ''sun'' THEN
+		WHILE czas < (SELECT Ostatni_Kurs from Linie WHERE id_linii=Linia) LOOP
+			czas = czas + (SELECT Czestosc_swieta from Linie WHERE id_linii=Linia )* interval ''1 minute'';
+			i = i+1;
+		END LOOP;
+	ELSE 
+	IF to_char(data, ''dy'') = ''sat'' THEN
+		WHILE czas < (SELECT Ostatni_Kurs from Linie WHERE id_linii=Linia) LOOP
+			czas = czas + (SELECT Czestosc_polswieta from Linie WHERE id_linii=Linia) * interval ''1 minute'';
+			i = i+1;
+		END LOOP;
+	ELSE
+	WHILE czas < (SELECT Ostatni_Kurs from Linie WHERE id_linii=Linia) LOOP
+			czas = czas + (SELECT Czestosc_powszednia from Linie WHERE id_linii=Linia )* interval ''1 minute'';
+			i = i+1;
+		END LOOP;
+	END IF;
+	END IF;
+	RETURN i;
 END;
 ' LANGUAGE 'plpgsql'; 
 
-CREATE TRIGGER uzupelnij_czas AFTER INSERT OR UPDATE OR DELETE ON przystanki_linie FOR EACH ROW EXECUTE PROCEDURE Uzupelnianie_czasu_podrozy();
 
 
---tego nie trzeba, mozna zalozyc ze czasy miedzy przystankami sie nie zmieniaja
--- CREATE OR REPLACE FUNCTION Uzupelnianie_czasu_podrozy2() RETURNS TRIGGER AS'
--- BEGIN
--- if(TG_OP = ''UPDATE'' ) THEN
--- 	for i in 1..300 LOOP
--- 	INSERT INTO 
--- 	END LOOP;
--- END IF;
--- END;
--- ' LANGUAGE 'plpgsql';
-
--- CREATE TRIGGER uzupelnij_czas2 AFTER UPDATE ON polaczenia_przystankow FOR EACH ROW EXECUTE PROCEDURE Uzupelnianie_czasu_podrozy2();
 
 
---castowanie daty na dzien: select to_char(CAST (N'09.01.2018' AS DATE), 'day');
-
-CREATE OR REPLACE FUNCTION Liczenie_lizby_kursow() RETURNS INTEGER AS'
+CREATE OR REPLACE FUNCTION Przydziel_pojazdy() RETURNS VOID AS'
+DECLARE
+	cur_tramwaj CURSOR FOR SELECT id_pracownika FROM KIEROWCY where pj_tramwaj=true;
+	cur_autobus CURSOR FOR SELECT id_pracownika FROM KIEROWCY where pj_autobus=true;
+	cur_pojazd_tramwaj CURSOR FOR SELECT id_pojazdu from Pojazdy_czytelne WHERE typ=''Tramwaj'';
+	cur_pojazd_autobus CURSOR FOR SELECT id_pojazdu from Pojazdy_czytelne WHERE typ=''Autobus'';
+	kierowca integer;
+	pojazd integer;
 BEGIN
-
+	OPEN cur_tramwaj;
+	OPEN cur_autobus;
+	OPEN cur_pojazd_autobus;
+	OPEN cur_pojazd_tramwaj;
+	UPDATE KIEROWCY set id_pojazdu=NULL;
+	LOOP FETCH cur_tramwaj INTO kierowca; 
+	EXIT WHEN NOT FOUND;
+		FETCH cur_pojazd_tramwaj INTO pojazd;
+		UPDATE KIEROWCY SET id_pojazdu=pojazd where id_pracownika=kierowca;
+			
+	END LOOP;
+	LOOP FETCH cur_autobus INTO kierowca; 
+	EXIT WHEN NOT FOUND;
+		FETCH cur_pojazd_autobus INTO pojazd;
+		UPDATE KIEROWCY SET id_pojazdu = pojazd where id_pracownika=kierowca;
+	END LOOP;
+	Close cur_tramwaj;
+	Close cur_autobus;
+	Close cur_pojazd_autobus;
+	Close cur_pojazd_tramwaj;
 END;
-' LANGUAGE 'plpgsql'; 
+' LANGUAGE 'plpgsql';
+
+SELECT k1.id_pracownika, k2.id_pracownika, k1.id_pojazdu, k2.id_pojazdu as drugie_id from kierowcy k1, kierowcy k2 where k1.id_pracownika<>k2.id_pracownika AND k1.id_pojazdu=k2.id_pojazdu;
+
+
+
+select generuj_grafik( CAST (N'14.01.2018' AS DATE) );
+
+
+CREATE OR REPLACE FUNCTION Generuj_grafik(data_dzien DATE) RETURNS VOID AS'
+DECLARE
+	cur_tramwaj CURSOR FOR SELECT id_pracownika FROM KIEROWCY where pj_tramwaj=true;
+	cur_autobus CURSOR FOR SELECT id_pracownika FROM KIEROWCY where pj_autobus=true;
+	cur_linie CURSOR FOR SELECT id_linii from LINIE;
+	linia INTEGER;
+	kierowca INTEGER;
+	czas_koniec TIME;
+	czestosc INTEGER;
+	czas TIME;
+	czas_pomocniczy TIME;
+	czas_drogi INTEGER;
+	ilosc INTEGER;
+	czas_poczatkowy TIME;
+	skip INTEGER;
+BEGIN
+	OPEN cur_tramwaj;
+	OPEN cur_autobus;
+	OPEN cur_linie;
+	LOOP FETCH cur_linie INTO linia;
+	EXIT WHEN NOT FOUND; 
+		DELETE FROM GRAFIK g WHERE g.data=data_dzien;
+		czas := (select Pierwszy_kurs from Linie where id_linii=linia);
+		czas_poczatkowy := (select Pierwszy_kurs from Linie where id_linii=linia);
+		czas_koniec := (select Ostatni_Kurs from Linie where id_linii=linia);
+		IF (( SELECT to_char(data_dzien, ''dy'') ) = ''sun'') THEN
+
+			czestosc := (select Czestosc_swieta from Linie where id_linii=Linia);	
+		ELSE IF ( (SELECT to_char(data_dzien, ''dy'') )= ''sat'') THEN
+			czestosc :=(select Czestosc_polswieta from Linie where id_linii=Linia);
+		ELSE
+			czestosc := (select Czestosc_powszednia from Linie where id_linii=Linia);
+		END IF;
+		END IF;
+		czas_drogi := (Select czas_podrozy from Linie where id_linii = Linia);
+		skip := 0;
+		WHILE czas <= czas_koniec LOOP
+			IF linia < 100 THEN
+				FETCH cur_tramwaj INTO kierowca; 
+			ELSE
+				FETCH cur_autobus INTO kierowca;
+			END IF;
+			czas_pomocniczy := czas;
+			ilosc:=1;
+			WHILE czas_pomocniczy - czas_drogi * interval ''1 minute'' < czas_koniec AND czas_drogi* ilosc *2 <= 480 LOOP
+				ilosc := ilosc+1;
+				czas_pomocniczy:= czas_pomocniczy+2 * czas_drogi * interval ''1 minute'';
+			
+			END LOOP;
+			IF ilosc > 1 THEN
+				ilosc:= ilosc-1;
+			END If;			
+			INSERT INTO GRAFIK VALUES (DEFAULT, linia, kierowca, czas, ilosc, data_dzien);
+			IF czas_poczatkowy + ((2 *czas_drogi - czestosc)+ skip) * interval  ''1 minute'' <= czas  THEN
+				czas := czas + (2 *czas_drogi * (ilosc-1) + czestosc) * interval ''1 minute'';
+				skip:= skip + 2 *czas_drogi * (ilosc) ;
+			ELSE
+				czas := czas +  czestosc * interval ''1 minute'';
+			END IF;
+		END LOOP;
+	END LOOP;
+	CLOSE cur_tramwaj;
+	CLOSE cur_autobus;
+	CLOSE cur_linie;
+END;
+' LANGUAGE 'plpgsql';
