@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" prefHeight="551.0" prefWidth="826.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mpk_psql.FXMLDocumentController">
+    <children>
+      <Text layoutX="91.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Otworz tunel na taurusa" />
+      <SplitPane dividerPositions="0.5" layoutX="118.0" layoutY="101.0" prefHeight="538.0" prefWidth="940.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane maxWidth="200.0" minHeight="160.0" minWidth="100.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                    <Button fx:id="button" layoutX="77.0" layoutY="243.0" onAction="#handleButtonAction" text="Login" />
+                    <Label fx:id="info" contentDisplay="CENTER" layoutX="23.0" layoutY="104.0" minHeight="16" minWidth="69" prefHeight="127.0" prefWidth="155.0" text="Nacisnij Login aby stworzyc tunel na pascala i połączyć się z bazą danych" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
+                  <Label layoutX="13.0" layoutY="321.0" prefHeight="127.0" prefWidth="166.0" textAlignment="CENTER" wrapText="true" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="490.0" prefWidth="714.0">
+               <children>
+                  <TextField fx:id="pracownicy_dane1" layoutX="18.0" layoutY="43.0" prefHeight="25.0" prefWidth="108.0" visible="false" />
+                  <Button fx:id="wyslij1" layoutX="485.0" layoutY="43.0" mnemonicParsing="false" onAction="#Insert_data_Pracownicy" text="INSERT" visible="false" />
+                  <Label fx:id="Label1" layoutX="18.0" layoutY="6.0" text="Pracownicy" visible="false" />
+                  <Label fx:id="Label2" layoutX="18.0" layoutY="23.0" text="Imie" visible="false" />
+                  <TextField fx:id="pracownicy_dane11" layoutX="135.0" layoutY="43.0" prefHeight="25.0" prefWidth="127.0" visible="false" />
+                  <Label fx:id="Label3" layoutX="135.0" layoutY="23.0" text="Nazwisko" visible="false" />
+                  <Label fx:id="Label4" layoutX="271.0" layoutY="23.0" text="Stanowisko" visible="false" />
+                  <Label fx:id="Label5" layoutX="404.0" layoutY="23.0" text="Przełożony" visible="false" />
+                  <TextField fx:id="pracownicy_dane1111" layoutX="404.0" layoutY="43.0" prefHeight="25.0" prefWidth="61.0" visible="false" />
+                  <TextField fx:id="pojazdy_dane1" layoutX="18.0" layoutY="126.0" prefHeight="25.0" prefWidth="108.0" visible="false" />
+                  <Label fx:id="Label6" layoutX="18.0" layoutY="103.0" text="ID_modelu" visible="false" />
+                  <Label fx:id="Label7" layoutX="18.0" layoutY="76.0" text="Pojazdy" visible="false" />
+                  <TextField fx:id="pojazdy_dane2" layoutX="132.0" layoutY="126.0" prefHeight="25.0" prefWidth="108.0" visible="false" />
+                  <Label fx:id="Label8" layoutX="132.0" layoutY="103.0" text="ID_Zajezdni" visible="false" />
+                  <Button fx:id="wyslij2" layoutX="260.0" layoutY="126.0" mnemonicParsing="false" onAction="#Insert_data_Pojazdy" text="INSERT" visible="false" />
+                  <Label fx:id="Label9" layoutX="20.0" layoutY="165.0" text="Zajezdnie" visible="false" />
+                  <Label fx:id="Label10" layoutX="20.0" layoutY="189.0" text="Adres" visible="false" />
+                  <Label fx:id="Label11" layoutX="134.0" layoutY="189.0" text="Pojemność" visible="false" />
+                  <TextField fx:id="zajezdnie_dane1" layoutX="17.0" layoutY="215.0" prefHeight="25.0" prefWidth="108.0" visible="false" />
+                  <TextField fx:id="zajezdnie_dane2" layoutX="132.0" layoutY="215.0" prefHeight="25.0" prefWidth="108.0" visible="false" />
+                  <Button fx:id="wyslij3" layoutX="260.0" layoutY="215.0" mnemonicParsing="false" onAction="#Insert_data_Zajezdnie" text="INSERT" visible="false" />
+                  <Label fx:id="Label12" layoutX="20.0" layoutY="256.0" text="Modele" visible="false" />
+                  <Label fx:id="Label13" layoutX="19.0" layoutY="281.0" text="Typ" visible="false" />
+                  <Label fx:id="Label14" layoutX="135.0" layoutY="281.0" text="Producent" visible="false" />
+                  <TextField fx:id="modele_dane1" layoutX="17.0" layoutY="305.0" prefHeight="25.0" prefWidth="108.0" visible="false" />
+                  <Label fx:id="Label15" layoutX="248.0" layoutY="281.0" text="Nazwa modelu" visible="false" />
+                  <TextField fx:id="modele_dane2" layoutX="132.0" layoutY="305.0" prefHeight="25.0" prefWidth="108.0" visible="false" />
+                  <TextField fx:id="modele_dane3" layoutX="248.0" layoutY="305.0" prefHeight="25.0" prefWidth="108.0" visible="false" />
+                  <Button fx:id="wyslij4" layoutX="369.0" layoutY="305.0" mnemonicParsing="false" onAction="#Insert_data_Modele" text="INSERT" visible="false" />
+                  <Label fx:id="Label16" layoutX="19.0" layoutY="339.0" text="Grafik" visible="false" />
+                  <Label fx:id="Label17" layoutX="20.0" layoutY="362.0" text="Data (DD.MM.YYY)" visible="false" />
+                  <TextField fx:id="grafik_dane" layoutX="17.0" layoutY="387.0" prefHeight="25.0" prefWidth="108.0" visible="false" />
+                  <Button fx:id="wyslij5" layoutX="135.0" layoutY="387.0" mnemonicParsing="false" onAction="#Insert_data_Grafik" text="GENERUJ" visible="false" />
+                  <Label fx:id="Label18" layoutX="19.0" layoutY="430.0" text="Linie" visible="false" />
+                  <Label fx:id="Label19" layoutX="19.0" layoutY="457.0" text="ID_Linii" visible="false" />
+                  <TextField fx:id="linie_dane1" layoutX="16.0" layoutY="485.0" prefHeight="25.0" prefWidth="51.0" visible="false" />
+                  <Label fx:id="Label20" layoutX="71.0" layoutY="457.0" text="Przystanek początkowy" visible="false" />
+                  <TextField fx:id="linie_dane2" layoutX="75.0" layoutY="485.0" prefHeight="25.0" prefWidth="116.0" visible="false" />
+                  <Label fx:id="Label21" layoutX="201.0" layoutY="457.0" text="Przystanek końcowy" visible="false" />
+                  <Label fx:id="Label22" layoutX="313.0" layoutY="457.0" text="Czestość powszednia" visible="false" />
+                  <Label fx:id="Label23" layoutX="429.0" layoutY="457.0" text="Czestość w soboty" visible="false" />
+                  <Label fx:id="Label24" layoutX="534.0" layoutY="457.0" text="Czestość w niedziele" visible="false" />
+                  <Label fx:id="Label25" layoutX="362.0" layoutY="439.0" text="Częstość podawana w minutach, całkowitych" visible="false" />
+                  <TextField fx:id="linie_dane3" layoutX="204.0" layoutY="485.0" prefHeight="25.0" prefWidth="99.0" visible="false" />
+                  <TextField fx:id="linie_dane4" layoutX="313.0" layoutY="485.0" prefHeight="25.0" prefWidth="112.0" visible="false" />
+                  <TextField fx:id="linie_dane5" layoutX="429.0" layoutY="485.0" prefHeight="25.0" prefWidth="98.0" visible="false" />
+                  <TextField fx:id="linie_dane6" layoutX="534.0" layoutY="485.0" prefHeight="25.0" prefWidth="108.0" visible="false" />
+                  <Label fx:id="Label26" layoutX="22.0" layoutY="538.0" text="Pierwszy kurs" visible="false" />
+                  <Label fx:id="Label27" layoutX="120.0" layoutY="538.0" text="Ostatni kurs" visible="false" />
+                  <TextField fx:id="linie_dane7" layoutX="22.0" layoutY="554.0" prefHeight="25.0" prefWidth="71.0" visible="false" />
+                  <TextField fx:id="linie_dane8" layoutX="116.0" layoutY="554.0" prefHeight="25.0" prefWidth="71.0" visible="false" />
+                  <Label fx:id="Label28" layoutX="17.0" layoutY="521.0" text="Podawane jako godzina (HH:MM)" visible="false" />
+                  <Button fx:id="wyslij6" layoutX="201.0" layoutY="554.0" mnemonicParsing="false" onAction="#Insert_data_Linie" text="INSERT" visible="false" />
+                  <Label fx:id="Label29" layoutX="17.0" layoutY="593.0" text="Linie_przystanki" visible="false" />
+                  <Label fx:id="Label30" layoutX="19.0" layoutY="617.0" text="ID_Linii" visible="false" />
+                  <Label fx:id="Label31" layoutX="78.0" layoutY="617.0" text="ID_przystanku" visible="false" />
+                  <Label fx:id="Label32" layoutX="167.0" layoutY="617.0" text="Kolejność" visible="false" />
+                  <TextField fx:id="linie_przystanki_dane1" layoutX="16.0" layoutY="641.0" prefHeight="25.0" prefWidth="51.0" visible="false" />
+                  <TextField fx:id="linie_przystanki_dane2" layoutX="81.0" layoutY="641.0" prefHeight="25.0" prefWidth="74.0" visible="false" />
+                  <TextField fx:id="linie_przystanki_dane3" layoutX="167.0" layoutY="641.0" prefHeight="25.0" prefWidth="51.0" visible="false" />
+                  <Label fx:id="Label33" layoutX="17.0" layoutY="677.0" text="Przystanki" visible="false" />
+                  <Label fx:id="Label34" layoutX="17.0" layoutY="701.0" text="Nazwa" visible="false" />
+                  <Label fx:id="Label35" layoutX="155.0" layoutY="701.0" text="Aglomeracyjny? " visible="false" />
+                  <TextField fx:id="przystanki_dane1" layoutX="16.0" layoutY="724.0" prefHeight="25.0" prefWidth="139.0" visible="false" />
+                  <CheckBox fx:id="przystanki_dane2" layoutX="185.0" layoutY="728.0" mnemonicParsing="false" visible="false" />
+                  <Button fx:id="wyslij7" layoutX="244.0" layoutY="641.0" mnemonicParsing="false" onAction="#Insert_data_przystanki_linie" text="INSERT" visible="false" />
+                  <Button fx:id="wyslij8" layoutX="244.0" layoutY="724.0" mnemonicParsing="false" onAction="#Insert_data_Przystanki" text="INSERT" visible="false" />
+                  <Label fx:id="Label36" layoutX="19.0" layoutY="765.0" text="Połączenia przystanków" visible="false" />
+                  <ChoiceBox fx:id="stanowiskoBox" layoutX="273.0" layoutY="43.0" prefHeight="25.0" prefWidth="109.0" visible="false" />
+                  <Label fx:id="Label37" layoutX="19.0" layoutY="782.0" text="Od" visible="false" />
+                  <Label fx:id="Label38" layoutX="85.0" layoutY="782.0" text="Do" visible="false" />
+                  <TextField fx:id="polaczenia_przystankow_dane1" layoutX="19.0" layoutY="799.0" prefHeight="25.0" prefWidth="51.0" visible="false" />
+                  <TextField fx:id="polaczenia_przystankow_dane2" layoutX="81.0" layoutY="799.0" prefHeight="25.0" prefWidth="51.0" visible="false" />
+                  <Label fx:id="Label39" layoutX="137.0" layoutY="782.0" text="Czas podróży (min)" visible="false" />
+                  <TextField fx:id="polaczenia_przystankow_dane3" layoutX="138.0" layoutY="799.0" prefHeight="25.0" prefWidth="102.0" visible="false" />
+                  <ChoiceBox fx:id="polaczenia_przystankow_dane4" layoutX="252.0" layoutY="799.0" prefWidth="150.0" visible="false" />
+                  <Button fx:id="wyslij9" layoutX="424.0" layoutY="799.0" mnemonicParsing="false" onAction="#Insert_data_polaczenia_przystankow" text="INSERT" visible="false" />
+                  <Label fx:id="Label40" layoutX="19.0" layoutY="831.0" text="Typy polaczen" visible="false" />
+                  <Label fx:id="Label41" layoutX="19.0" layoutY="848.0" text="Typ" visible="false" />
+                  <TextField fx:id="typy_polaczen_dane1" layoutX="19.0" layoutY="865.0" prefHeight="25.0" prefWidth="98.0" visible="false" />
+                  <Button fx:id="wyslij10" layoutX="145.0" layoutY="865.0" mnemonicParsing="false" onAction="#Insert_data_typy_polaczen" text="INSERT" visible="false" />
+                  <TableView fx:id="tableview" prefHeight="551.0" prefWidth="616.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+      <MenuBar fx:id="Menu_cale" layoutY="2.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" onAction="#view_menu" text="Tabele">
+            <items>
+              <MenuItem fx:id="Pracownicy_menu" mnemonicParsing="false" onAction="#Pracownicy_menu_click" text="Pracownicy" />
+                  <MenuItem fx:id="Pracownicy_menu1" mnemonicParsing="false" onAction="#Kierowcyy_menu_click" text="Kierowcy" />
+                  <MenuItem mnemonicParsing="false" onAction="#Pojazdy_menu_click" text="Pojazdy" />
+                  <MenuItem mnemonicParsing="false" onAction="#Modele_menu_click" text="Modele" />
+                  <MenuItem mnemonicParsing="false" onAction="#Zajezdnie_menu_click" text="Zajezdnie" />
+                  <MenuItem fx:id="Pracownicy_menu11" mnemonicParsing="false" onAction="#Grafik_menu_click" text="Grafik" />
+                  <MenuItem mnemonicParsing="false" onAction="#Linie_menu_click" text="Linie" />
+                  <MenuItem mnemonicParsing="false" onAction="#Przystanki_linie_menu_click" text="Przystanki_linie" />
+                  <MenuItem mnemonicParsing="false" onAction="#Przystanki_menu_click" text="Przystanki" />
+                  <MenuItem mnemonicParsing="false" onAction="#Przystanki_polaczenia_menu_click" text="Przystanki_polaczenia" />
+                  <MenuItem mnemonicParsing="false" onAction="#Typy_polaczen_menu_click" text="Typy_polaczen" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" onAction="#view_menu" text="Widoki">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#Przystanki_widoki_click" text="Przystanki w liniach" />
+                  <MenuItem mnemonicParsing="false" onAction="#Kierowcy_widoki_click" text="Kierowcy i ich pojazdy" />
+                  <MenuItem mnemonicParsing="false" onAction="#pojazdy_widoki_click" text="Pojazdy informacje" />
+                  <MenuItem mnemonicParsing="false" onAction="#Do_liczenia_widoki_click" text="Do liczenia czasu podróży" />
+                  <MenuItem mnemonicParsing="false" onAction="#Polaczenia_pomocnicze_widoki_click" text="Polaczenia przystankow" />
+                  <MenuItem mnemonicParsing="false" onAction="#Dodatkowe_widoki_click" text="Dodatkowe informacje o połączeniah" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" onAction="#dodawanieMenu" text="Dodawanie danych">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#Dodawanie_click" text="Dodawanie" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+    </children>
+</AnchorPane>
