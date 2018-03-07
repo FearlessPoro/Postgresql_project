@@ -1,0 +1,2 @@
+# Postgresql_project
+Java application written for easier access to a PostgreSQL database located on Pascal, a server provided by my faculty, for students. The database allowed for, among other things, automatic shift assignment for drivers, vehicle assignment and salary calculator. All of the code used to create the database and fill it with data, along with documentation(in polish) is located in the repository. The Java executable is located in "Aplikacja" folder, and the source code is located in MPK_PSQL folder.
